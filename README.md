@@ -171,7 +171,7 @@ fecha programada.
 
 ## Revelación de nombres
 
-El **domingo 15 de noviembre de 2026 a las 3:00 p. m. (Colombia)** se publican los
+El **domingo 15 de noviembre de 2026 a las 3:00 p. m.** se publican los
 nombres y la predicción de cada invitado, en orden alfabético. La hora vive en
 `shared/reveal.ts` (`2026-11-15T15:00:00-05:00`) y la decide el **reloj del
 servidor**; antes de esa hora `/api/reveal` devuelve `revealed:false` y

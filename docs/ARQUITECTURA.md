@@ -136,7 +136,7 @@ La fecha se decide en el servidor con `shared/reveal.ts`:
   "revealed": false,
   "preview": false,
   "revealAt": "2026-11-15T15:00:00-05:00",
-  "revealLabel": "domingo 15 de noviembre de 2026 · 3:00 p. m. (Colombia)",
+  "revealLabel": "domingo 15 de noviembre de 2026 · 3:00 p. m.",
   "results": { "girl": 12, "boy": 9, "total": 21, "updatedAt": "..." },
   "entries": []
 }

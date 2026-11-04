@@ -31,12 +31,16 @@ function formatRemaining(milliseconds: number): string {
 
   if (days > 0) {
     const dayWord = days === 1 ? 'día' : 'días';
-    if (hours > 0) return `Faltan ${days} ${dayWord} y ${hours} h`;
+    if (hours > 0) {
+      return `Faltan ${days} ${dayWord}, ${hours} h${minutes > 0 ? ` y ${minutes} min` : ''}`;
+    }
     if (minutes > 0) return `Faltan ${days} ${dayWord} y ${minutes} min`;
     return `Faltan ${days} ${dayWord}`;
   }
-  if (hours > 0) return `Faltan ${hours} h ${minutes} min`;
-  if (minutes > 0) return `Faltan ${minutes} min ${seconds} s`;
+  if (hours > 0) {
+    return `Faltan ${hours} h${minutes > 0 ? ` y ${minutes} min` : ''}`;
+  }
+  if (minutes > 0) return `Faltan ${minutes} min y ${seconds} s`;
   return `Faltan ${seconds} s`;
 }
 
@@ -166,7 +170,7 @@ export function RevealSection() {
             </time>
             .
           </p>
-          <p className="text-blue-deep mt-2 text-[12.5px] tracking-[0.04em]">
+          <p className="text-blue-deep mt-2 text-[12.5px] tracking-[0.04em] tabular-nums">
             {formatRemaining(remaining)}
           </p>
         </div>

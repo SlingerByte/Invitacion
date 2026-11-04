@@ -178,8 +178,8 @@ contenido está visible desde el inicio. La composición sigue completa.
   en los resultados agregados. Cero votos muestra un estado vacío, no datos de
   ejemplo. Los nombres tienen su propia sección de revelación.
 - **Revelación**: al final de la página. Antes de la hora, candado dorado, título
-  Sacramento 28 px `rose-deep`, la fecha `domingo 15 de noviembre · 3:00 p. m.
-  (Colombia)` y una cuenta atrás en `blue-deep` 12,5 px; no se muestra ningún
+  Sacramento 28 px `rose-deep`, la fecha `domingo 15 de noviembre · 3:00 p. m.`
+  y una cuenta atrás en `blue-deep` 12,5 px; no se muestra ningún
   nombre. Después, «Quién votó qué», subtítulo con el total y la frase «en orden
   alfabético», y una tarjeta blanca con una fila por invitado: nombre en
   `blue-ink` 15 px y píldora «Niña» / «Niño» en los tonos de la votación. La
