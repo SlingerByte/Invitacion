@@ -6,6 +6,7 @@ import type {
   VoteOutcome,
   VoteStatus,
 } from '@shared/vote-contract';
+import type { RevealPayload } from '@shared/reveal';
 
 export class VoteApiError extends Error {
   readonly code: ApiErrorCode | 'network_error';
@@ -47,6 +48,20 @@ export async function fetchResults(signal?: AbortSignal): Promise<PollResults> {
       ...(signal ? { signal } : {}),
     });
     return await readResponse<PollResults>(response);
+  } catch (error) {
+    if (error instanceof VoteApiError) throw error;
+    throw new VoteApiError('network_error');
+  }
+}
+
+export async function fetchReveal(signal?: AbortSignal): Promise<RevealPayload> {
+  try {
+    const response = await fetch('/api/reveal', {
+      cache: 'no-store',
+      headers: { accept: 'application/json' },
+      ...(signal ? { signal } : {}),
+    });
+    return await readResponse<RevealPayload>(response);
   } catch (error) {
     if (error instanceof VoteApiError) throw error;
     throw new VoteApiError('network_error');

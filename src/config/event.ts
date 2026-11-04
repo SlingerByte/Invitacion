@@ -2,6 +2,7 @@
  * Todos los datos del evento viven aquí. La composición sólo lee lo que muestra;
  * los campos que no se usan se eliminan en cuanto dejan de tener consumidor.
  */
+import { REVEAL_AT_ISO, REVEAL_AT_LABEL } from '@shared/reveal';
 
 export interface EventConfig {
   meta: {
@@ -21,6 +22,9 @@ export interface EventConfig {
     /** ISO 8601 (hora de Colombia) para calcular y ordenar. */
     dateISO: string | null;
     timeLabel: string;
+    /** Momento exacto en que se revelan los nombres y las predicciones. */
+    revealAtISO: string;
+    revealLabel: string;
     /** Se muestra como «Código de vestimenta: …». Vacío = sin línea. */
     dressCode: string;
   };
@@ -61,6 +65,8 @@ export const event: EventConfig = {
     dateLabel: 'Domingo 15 de noviembre de 2026',
     dateISO: '2026-11-15T14:30:00-05:00',
     timeLabel: '2:30 p. m.',
+    revealAtISO: REVEAL_AT_ISO,
+    revealLabel: REVEAL_AT_LABEL,
     dressCode: 'blanco o beige',
   },
   venue: {

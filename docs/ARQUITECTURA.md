@@ -42,6 +42,8 @@ api/                     funciones serverless (Vercel las publica como /api/*)
   votes.ts               POST  registrar predicción
   vote-status.ts         GET   estado del navegador actual
   results.ts             GET   resultados agregados
+  reveal.ts              GET   nombres y predicciones después de la hora
+  dev-reset.ts           POST  sólo desarrollo: reiniciar la prueba
   _lib/                  (Vercel ignora las carpetas con _)
     db.ts → poll.ts      cliente Neon, lectura de resultados y estado
     voter.ts             cookie, identificador, HMAC
@@ -50,13 +52,16 @@ db/migrations/001_init.sql
 db/migrations/002_guest_name.sql
 scripts/poll.ts          herramienta administrativa (status | results | close | open)
 shared/vote-contract.ts  tipos, validación y normalización de nombre, frontend ↔ API
+shared/reveal.ts         fecha, etiqueta y tipos de la revelación
 src/
   config/event.ts        todos los datos editables del evento
   sections/Invitation.tsx  composición principal (conejos, título, datos, voto)
   sections/VoteSection.tsx máquina de estados visual de la votación
+  sections/RevealSection.tsx bloqueo, vista previa y lista revelada
   components/            StarField, SkyWeather, ConfettiBurst y VoteResults
   hooks/useVote.ts       estados de la votación y llamadas a /api
-  lib/voteApi.ts         cliente de /api/vote-status, /api/results y /api/votes
+  hooks/useReveal.ts     sondeo y hora de la revelación
+  lib/voteApi.ts         cliente de /api/vote-status, /api/results, /api/reveal y /api/votes
   lib/                   utilidades (cn, enlaces)
   index.css              tokens del sistema visual (@theme)
 public/assets/           conejos recortados en PNG (los SVG fuente viven en docs/assets)
@@ -119,7 +124,29 @@ el cliente. Se usa desde el botón «Reiniciar prueba» de la confirmación.
 { "girl": 12, "boy": 9, "total": 21, "updatedAt": "2026-11-04T18:22:31.004Z" }
 ```
 
-Sólo agregados. No existe ninguna ruta que devuelva filas de `votes`.
+Sólo agregados. La lista nominal vive en `/api/reveal`, no aquí.
+
+### `GET /api/reveal`
+
+La fecha se decide en el servidor con `shared/reveal.ts`:
+`2026-11-15T15:00:00-05:00` (3:00 p. m. Colombia). Antes de esa hora:
+
+```json
+{
+  "revealed": false,
+  "preview": false,
+  "revealAt": "2026-11-15T15:00:00-05:00",
+  "revealLabel": "domingo 15 de noviembre de 2026 · 3:00 p. m. (Colombia)",
+  "results": { "girl": 12, "boy": 9, "total": 21, "updatedAt": "..." },
+  "entries": []
+}
+```
+
+Después, `entries` trae `{ "name": "María José", "prediction": "girl" }` ordenado
+por nombre. En desarrollo (`isDevMode`) se permite la vista previa antes de la
+hora con `preview: true`; en producción y preview de Vercel siempre es `false`.
+El endpoint no consulta ni devuelve nombres antes de la hora. No hay parámetro del
+navegador que cambie la fecha.
 
 ## 4. Modelo de datos
 
@@ -134,7 +161,8 @@ votes (id uuid PK, voter_hash text UNIQUE, prediction text CHECK,
   ni seguir a nadie, y cambiar el pepper invalida los hashes anteriores.
 - `guest_name` es el nombre que escribe la persona. Es nullable para no invalidar
   las filas anteriores a la migración 002; la API exige nombre en todo voto nuevo.
-  No es autenticación y no se devuelve en ningún endpoint público.
+  No es autenticación. Sólo se devuelve, junto a la predicción, en `/api/reveal`
+  cuando el servidor confirma la hora de revelación.
 - `votes_voter_hash_key` (índice único) es la garantía de un voto por navegador.
 - `votes_prediction_allowed` limita los valores a `girl`/`boy` también en la base.
 - `votes_guest_name_length` limita el nombre a 2-40 caracteres si está presente.
@@ -184,8 +212,9 @@ puede garantizar un voto por familia. Alguien puede votar desde otro dispositivo
 usar una ventana privada o borrar las cookies. La solución evita duplicados en el
 uso normal, que es el objetivo declarado, sin rastreo invasivo. No se guardan
 teléfonos, correos ni direcciones IP. El único dato personal es el nombre que la
-persona escribe voluntariamente para acompañar su predicción; no se publica y no
-se usa para identificar ni autenticar a nadie.
+persona escribe voluntariamente para acompañar su predicción; permanece oculto
+hasta la revelación programada del 15/11/2026 a las 3:00 p. m. Colombia y entonces
+se muestra junto a su predicción. No se usa para identificar ni autenticar a nadie.
 
 ## 7. Cerrar la votación
 

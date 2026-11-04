@@ -3,6 +3,7 @@ import { event } from '@/config/event';
 import { StarField } from '@/components/StarField';
 import { Clouds, StarRain } from '@/components/SkyWeather';
 import { VoteSection } from '@/sections/VoteSection';
+import { RevealSection } from '@/sections/RevealSection';
 import { mapHref } from '@/lib/event-links';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -207,6 +208,8 @@ export function Invitation() {
           </motion.div>
 
           <VoteSection />
+
+          <RevealSection />
 
           <motion.p
             {...reveal(0.2)}

@@ -19,12 +19,13 @@ parte del repositorio.
 
 La página principal está construida: conejos y globos, título «Niño o Niña»,
 invitación, datos reales del evento y votación completa con nombre, seis estados,
-resultados agregados y cierre desde el servidor.
+resultados agregados, cierre desde el servidor y revelación programada de nombres.
 
-La base de Neon ya está creada, las migraciones 001 y 002 aplicadas y el flujo de
-voto probado contra Neon real: voto nuevo, duplicado del mismo navegador, estado,
-resultados, nombre inválido, dos solicitudes simultáneas, cerrada y reapertura.
-No se ha desplegado nada todavía.
+La app está desplegada en Vercel y el flujo de voto funciona. La base de Neon tiene
+las migraciones 001 y 002 aplicadas; el voto se probó contra Neon real (nuevo,
+duplicado, estado, resultados, nombre inválido, simultáneos, cerrada y reapertura)
+y la revelación se probó con el reloj del servidor antes y después de la hora,
+además de la vista previa local. Falta desplegar este último cambio.
 
 ## Requisitos
 
@@ -145,7 +146,9 @@ no se reciben predicciones.
    y también entiende ese 409 al enviar.
 5. El nombre que escribe la persona se normaliza en el cliente y en el servidor
    (NFC, 2-40 caracteres) y se guarda en `votes.guest_name`. No es autenticación,
-   no verifica identidad y no se devuelve en los resultados públicos.
+   no verifica identidad y no aparece en los resultados agregados. Permanece
+   oculto hasta la revelación programada; desde ese momento se muestra junto a su
+   predicción en `/api/reveal`.
 
 ### Modo desarrollo
 
@@ -163,8 +166,26 @@ hay ningún parámetro del navegador que pueda habilitarla.
 lista de invitados, no es posible garantizar matemáticamente un voto por familia.
 Alguien puede votar desde otro dispositivo o navegador, o borrar sus datos. El
 sistema evita duplicados en el uso normal sin rastrear a nadie. No se guardan
-teléfonos, correos ni direcciones IP; el nombre es voluntario y sólo acompaña la
-predicción.
+teléfonos, correos ni direcciones IP; el nombre es voluntario y se revela en la
+fecha programada.
+
+## Revelación de nombres
+
+El **domingo 15 de noviembre de 2026 a las 3:00 p. m. (Colombia)** se publican los
+nombres y la predicción de cada invitado, en orden alfabético. La hora vive en
+`shared/reveal.ts` (`2026-11-15T15:00:00-05:00`) y la decide el **reloj del
+servidor**; antes de esa hora `/api/reveal` devuelve `revealed:false` y
+`entries:[]`, sin consultar ni enviar nombres. Ni el reloj del navegador ni un
+parámetro de la URL pueden adelantarla.
+
+Con `npm run dev` y `VOTE_DEV_MODE=true` se ve la **vista previa** antes de la
+hora: si hay votos reales muestra esos nombres; si no hay ninguno, muestra datos
+de ejemplo marcados como tales. En producción y en preview de Vercel la vista
+previa no existe.
+
+La página abierta consulta `/api/reveal` cada 15 s y tiene un temporizador para la
+hora exacta; cuando el servidor confirma la revelación, la lista aparece sin
+recargar.
 
 ## Variables de entorno en Vercel
 
@@ -184,7 +205,7 @@ bundle público. `.env` está en `.gitignore` y no debe subirse al repositorio.
 
 ## Desplegar
 
-No se ha desplegado nada. Cuando el dominio esté decidido:
+La app está desplegada en Vercel. Cuando el dominio definitivo esté decidido:
 
 1. Importa el repositorio en Vercel. El preset es **Vite**: build `npm run build`,
    salida `dist`. Las funciones de `api/` se publican automáticamente.

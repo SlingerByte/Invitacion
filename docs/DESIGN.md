@@ -137,6 +137,7 @@ Las fuentes se cargan desde Google Fonts en `index.html` (Sacramento y Montserra
 | Selección de voto | Escala 1 → 1.05 y elevación de 2 px con muelle; anillo dorado, check y el globo que se infla y estalla. |
 | Confeti | 20 partículas desde el globo pulsado, 0.8-1.1 s, en rosa/azul, destello y oro; no bloquea la lectura. |
 | Formulario / confirmación | Aparición suave de 0.45 s; el estado cambia sin recargar. |
+| Revelación | La cuenta atrás se actualiza cada segundo sin animación; al confirmar el servidor, el título y la lista entran con 0.7 s de opacidad y `y`. |
 
 Con `prefers-reduced-motion: reduce`: no hay flotación, parpadeo, lluvia, confeti,
 parallax ni entradas animadas; las nubes quedan quietas, el globo no estalla y el
@@ -174,7 +175,16 @@ contenido está visible desde el inicio. La composición sigue completa.
   texto de gracias y aviso de un voto por navegador. Sólo en desarrollo aparece
   «Reiniciar prueba», que borra el voto de ese navegador para repetir los estados.
 - **Resultados**: sólo cifras agregadas, dos barras y porcentajes; nunca nombres
-  ni filas individuales. Cero votos muestra un estado vacío, no datos de ejemplo.
+  en los resultados agregados. Cero votos muestra un estado vacío, no datos de
+  ejemplo. Los nombres tienen su propia sección de revelación.
+- **Revelación**: al final de la página. Antes de la hora, candado dorado, título
+  Sacramento 28 px `rose-deep`, la fecha `domingo 15 de noviembre · 3:00 p. m.
+  (Colombia)` y una cuenta atrás en `blue-deep` 12,5 px; no se muestra ningún
+  nombre. Después, «Quién votó qué», subtítulo con el total y la frase «en orden
+  alfabético», y una tarjeta blanca con una fila por invitado: nombre en
+  `blue-ink` 15 px y píldora «Niña» / «Niño» en los tonos de la votación. La
+  vista de prueba local lleva un aviso dorado «Vista de prueba» y, si no hay
+  votos reales, seis nombres de ejemplo claramente marcados.
 - **Error**: mensaje de indisponibilidad y botón «Reintentar» de 44 px; no
   inventa resultados.
 
@@ -206,6 +216,9 @@ anuncia por `aria-live`; ninguno depende sólo del color.
   `aria-hidden`.
 - La confirmación, el cierre y los errores se anuncian por `role="status"` /
   `role="alert"`; los resultados se suman al anuncio.
+- La revelación usa `role="status"` para anunciar el cambio de bloqueada a
+  disponible; los nombres son una lista semántica y la cuenta atrás no se anuncia
+  cada segundo. Antes de la hora no hay nombres en el DOM.
 - El contenido se entiende sin animaciones y sin WebGL.
 - **Contraste medido:** invitación y datos principales, 5,6:1; datos
   secundarios, ayuda y avisos, 4,77:1; títulos grandes, 3,1:1; la «o» de oro,

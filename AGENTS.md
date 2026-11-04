@@ -14,7 +14,8 @@ herramientas no se versionan.
 Invitación web interactiva para una celebración de revelación de género. Se comparte
 como **un único enlace público de WhatsApp**. El invitado, desde el móvil, ve a los
 conejos con globos, lee la invitación, consulta la fecha, el lugar y la hora, y deja
-una predicción con su nombre. Tono: ternura, emoción, expectativa, elegancia,
+una predicción con su nombre. El domingo 15 de noviembre de 2026, a las 3:00 p. m.
+Colombia, se revelan los nombres y las predicciones en orden alfabético. Tono: ternura, emoción, expectativa, elegancia,
 cercanía. El género del bebé nunca se revela ni se insinúa. No hay RSVP por
 WhatsApp hasta que el organizador facilite un número real.
 
@@ -70,14 +71,14 @@ desplegar.
 ## 5. Estructura
 
 ```
-api/            funciones serverless (votación); _lib/ es interna
+api/            funciones serverless (votación y revelación); _lib/ es interna
 db/migrations/  SQL versionado (001 base, 002 nombre del invitado)
 scripts/        administración de la votación, migraciones y tarjeta OG
-shared/         tipos y validación compartidos frontend ↔ API
+shared/         tipos, validación y fecha de revelación compartidos
 src/config/     event.ts — todos los datos editables del evento
-src/sections/   Invitation.tsx (composición) y VoteSection.tsx (seis estados)
+src/sections/   Invitation.tsx (composición), VoteSection.tsx y RevealSection.tsx
 src/components/ StarField, SkyWeather, ConfettiBurst y VoteResults
-src/hooks/      useVote.ts (estado de la votación)
+src/hooks/      useVote.ts (votación) y useReveal.ts (revelación)
 src/lib/        voteApi.ts, cn y enlaces
 src/index.css   tokens del sistema visual (@theme)
 docs/           dirección de arte, sistema de diseño, arquitectura; docs/assets con los SVG fuente
@@ -145,14 +146,20 @@ partir la página en rosa/azul, script en textos funcionales.
    production/preview. En producción el flag se ignora, el reset responde 404 y
    ningún parámetro del navegador puede habilitarla.
 6. El nombre que escribe el invitado se guarda en `votes.guest_name` sólo para
-   acompañar su predicción. **No es autenticación ni verificación de identidad**, no
-   se usa para identificar a nadie y nunca se devuelve en resultados públicos. No se
-   recogen teléfonos, correos ni IP; en la base sólo vive además el HMAC del
-   identificador de la cookie.
+   acompañar su predicción y revelarla al final. **No es autenticación ni
+   verificación de identidad**, no se usa para identificar a nadie y no se devuelve
+   en resultados agregados. Excepción programada: desde el **15/11/2026, 3:00 p. m.
+   Colombia**, `GET /api/reveal` devuelve nombre y predicción. Antes de esa hora la
+   API no consulta ni devuelve nombres, ni en producción ni en preview; la vista
+   previa local depende sólo de `isDevMode()` en el servidor. No se recogen
+   teléfonos, correos ni IP; en la base sólo vive además el HMAC del identificador
+   de la cookie.
 7. La votación se cierra sólo desde el servidor (`npm run poll:close` o SQL). No
    existe endpoint ni botón público para eso.
-8. Resultados: sólo cifras reales y agregadas. Cero = estado vacío, nunca datos de
-   ejemplo ni nombres.
+8. Resultados agregados: sólo cifras reales; cero = estado vacío, nunca datos de
+   ejemplo. La lista nominal es la excepción de la revelación programada. Sólo la
+   vista de prueba local puede mostrar nombres de ejemplo, siempre marcados como
+   tales; producción jamás los usa.
 9. Sin despliegues, sin crear proyectos externos y sin publicar nada sin
    autorización explícita.
 10. La página debe funcionar sin WebGL, con `prefers-reduced-motion` y sin API.
@@ -170,11 +177,15 @@ se solapa con el texto y que nada se sale del viewport. Probar los estados de la
 votación (abierta, seleccionada, registrada, ya votada, cerrada, error), el nombre
 vacío/corto, el nombre válido y el movimiento reducido. En desarrollo se usa
 `VOTE_DEV_MODE` para repetir todos los estados; en producción se comprueba que el
-duplicado responde 409 y que `/api/dev/reset` responde 404. Los cambios de backend
-se prueban con `npm run dev` contra la base real y, antes de desplegar, se repiten
-con `npx vercel dev` para comprobar paridad: navegador sin votar, navegador que ya
-votó, dos solicitudes simultáneas, predicción inválida, nombre inválido, votación
-cerrada, base inaccesible. No declares probado lo que sólo compiló.
+duplicado responde 409 y que `/api/dev/reset` responde 404. También se prueba
+`/api/reveal`: antes de la hora devuelve `revealed:false` y `entries:[]`, sin
+nombres; a la hora devuelve los nombres y las predicciones ordenados; la vista
+previa sólo existe con `VOTE_DEV_MODE` local. El reloj del navegador nunca decide.
+Los cambios de backend se prueban con `npm run dev` contra la base real y, antes
+de desplegar, se repiten con `npx vercel dev` para comprobar paridad: navegador
+sin votar, navegador que ya votó, dos solicitudes simultáneas, predicción
+inválida, nombre inválido, votación cerrada, base inaccesible. No declares probado
+lo que sólo compiló.
 
 ## 10. Estado actual
 
@@ -191,10 +202,12 @@ cerrada, base inaccesible. No declares probado lo que sólo compiló.
   `409` en producción, estado, resultados, nombre inválido, simultáneos, cerrada,
   reapertura y excepción local de pruebas con reset. Añadidos lluvia de estrellas,
   nubes, botones con globo que estalla en confeti y el modo de pruebas del servidor.
+  También la revelación programada de nombres y predicciones para el 15/11/2026 a
+  las 3:00 p. m. Colombia, con vista previa local y bloqueo estricto en producción.
 - **Pendiente:** revisar en navegador la pasada actual (título, cielo, botones de
-  voto y estados), convertir `og:image` a URL absoluta al fijar el dominio y
-  confirmar si se quiere RSVP por WhatsApp o un enlace de Maps verificado.
-- **No hecho:** ningún despliegue.
+  voto, revelación bloqueada y lista revelada), desplegar este commit, convertir
+  `og:image` a URL absoluta al fijar el dominio y confirmar si se quiere RSVP por
+  WhatsApp o un enlace de Maps verificado.
 
 Trabaja por etapas y no reescribas la dirección de arte sin una razón explícita del
 usuario: los conejos, los globos, la paleta y las tipografías son decisiones

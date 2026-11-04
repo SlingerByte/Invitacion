@@ -27,9 +27,10 @@ Opened cold from WhatsApp, on mobile data, with no prior context and no login. S
 ## Capabilities and Constraints
 
 - One vertical invitation: rabbits and balloons, Niño/Niña title, invitation copy, parents, date, place, address, time, dress code, and the prediction vote.
-- Vote: one prediction per browser, enforced server-side with an HttpOnly identifier cookie, an HMAC hash in Postgres, and a UNIQUE constraint. The guest also writes a name; it accompanies the prediction, is stored in `votes.guest_name`, and is never returned in public results.
+- Vote: one prediction per browser, enforced server-side with an HttpOnly identifier cookie, an HMAC hash in Postgres, and a UNIQUE constraint. The guest also writes a name; it accompanies the prediction, is stored in `votes.guest_name`, stays hidden until the scheduled reveal, and is then shown with the prediction.
 - Six interface states plus a technical error state: loading, open, selected, submitting, recorded, closed, error.
-- Results are aggregated counts and percentages only, real data only, empty state when no votes exist. No names, no individual rows, no IP addresses.
+- Results are aggregated counts and percentages only, real data only, empty state when no votes exist. No names, no individual rows, no IP addresses in the aggregate results.
+- On **15 November 2026 at 3:00 p. m. Colombia**, `/api/reveal` publishes each guest name with their prediction, alphabetically. The server clock is the only authority; before that moment the endpoint returns no names, in production and preview. Local development may preview it with the server-only dev flag.
 - Vote can be closed by an organiser procedure persisted in Postgres; guests then see results and a closed message.
 - No RSVP button is shipped: no WhatsApp number was provided, and no number is invented. The prediction is the participation path.
 - The address links to Google Maps (a search with the real name and address, no invented coordinates). There is still no verified Maps URL; no calendar feature is shipped.
@@ -50,7 +51,7 @@ Real event facts supplied by the organisers: Danna and Oscar, Sunday 15 November
 2. Composure over spectacle. Motion earns its place by making the rabbits and balloons breathe, then gets out of the way of the text.
 3. The secret stays whole. Every visual decision must work identically for either answer.
 4. Mobile at hand, in poor light, on a slow connection is the real device; desktop is the generous version of the same column.
-5. Honest data. Empty means empty, closed means closed, an error says so and offers a way back. The name is user-provided, never presented as identity verification.
+5. Honest data. Empty means empty, closed means closed, an error says so and offers a way back. The name is user-provided, never presented as identity verification, and remains hidden until the scheduled reveal.
 
 ## Accessibility & Inclusion
 

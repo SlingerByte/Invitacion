@@ -11,6 +11,7 @@ const API_ROUTES: Record<string, { module: string; methods: ('GET' | 'POST')[] }
   '/api/votes': { module: '/api/votes.ts', methods: ['POST'] },
   '/api/vote-status': { module: '/api/vote-status.ts', methods: ['GET'] },
   '/api/results': { module: '/api/results.ts', methods: ['GET'] },
+  '/api/reveal': { module: '/api/reveal.ts', methods: ['GET'] },
   '/api/dev/reset': { module: '/api/dev-reset.ts', methods: ['POST'] },
 };
 
