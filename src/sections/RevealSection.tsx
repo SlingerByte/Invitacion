@@ -29,7 +29,12 @@ function formatRemaining(milliseconds: number): string {
   const minutes = Math.floor((totalSeconds % 3_600) / 60);
   const seconds = totalSeconds % 60;
 
-  if (days > 0) return `Faltan ${days} ${days === 1 ? 'día' : 'días'}`;
+  if (days > 0) {
+    const dayWord = days === 1 ? 'día' : 'días';
+    if (hours > 0) return `Faltan ${days} ${dayWord} y ${hours} h`;
+    if (minutes > 0) return `Faltan ${days} ${dayWord} y ${minutes} min`;
+    return `Faltan ${days} ${dayWord}`;
+  }
   if (hours > 0) return `Faltan ${hours} h ${minutes} min`;
   if (minutes > 0) return `Faltan ${minutes} min ${seconds} s`;
   return `Faltan ${seconds} s`;
