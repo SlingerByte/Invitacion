@@ -3,10 +3,10 @@ import {
   normalizeGuestName,
   type Prediction,
   type VoteOutcome,
-} from '../shared/vote-contract';
-import { fail, isSameOrigin, isSecureRequest, json, readJson } from './_lib/http';
-import { getSql, isDevMode, readEnv, readResults } from './_lib/poll';
-import { createVoterId, hashVoterId, readVoterId, voterCookie } from './_lib/voter';
+} from '../shared/vote-contract.js';
+import { fail, isSameOrigin, isSecureRequest, json, readJson } from './_lib/http.js';
+import { getSql, isDevMode, readEnv, readResults } from './_lib/poll.js';
+import { createVoterId, hashVoterId, readVoterId, voterCookie } from './_lib/voter.js';
 
 export const config = { runtime: 'nodejs' };
 

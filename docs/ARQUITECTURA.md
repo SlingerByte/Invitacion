@@ -66,6 +66,11 @@ public/assets/           conejos recortados en PNG (los SVG fuente viven en docs
 
 Todas las respuestas son JSON, `Cache-Control: no-store`.
 
+Las funciones de `api/` son ESM (`"type": "module"`); por eso todos sus imports
+relativos llevan extensión `.js` (`./_lib/http.js`, `../shared/vote-contract.js`).
+Vercel resuelve esas rutas al empaquetar las funciones; sin la extensión, Node
+falla con `ERR_MODULE_NOT_FOUND` en producción aunque `tsc` pase.
+
 ### `GET /api/vote-status`
 
 Asigna cookie si el navegador aún no la tiene.

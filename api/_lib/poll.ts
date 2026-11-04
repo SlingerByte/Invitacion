@@ -1,5 +1,5 @@
 import { neon, type NeonQueryFunction } from '@neondatabase/serverless';
-import type { PollResults } from '../../shared/vote-contract';
+import type { PollResults } from '../../shared/vote-contract.js';
 
 export function readEnv(name: 'DATABASE_URL' | 'VOTE_HASH_PEPPER'): string | null {
   const value = process.env[name];

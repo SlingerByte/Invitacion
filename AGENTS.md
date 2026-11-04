@@ -90,6 +90,8 @@ public/assets/  conejos recortados en PNG
   `noUncheckedIndexedAccess` activos.
 - Importa con alias `@/` (src) y `@shared/` (shared). Importa tipos con
   `import type`.
+- En `api/`, todos los imports relativos llevan extensión `.js` (ESM estricto de
+  Vercel). TypeScript los resuelve a `.ts` en el build; no los dejes sin extensión.
 - Configuración, presentación y lógica separadas: los textos y datos viven en
   `src/config/event.ts`; las secciones no contienen datos del evento.
 - Estilos con Tailwind y **tokens** de `src/index.css`. No escribas hex sueltos en

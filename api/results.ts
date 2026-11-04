@@ -1,5 +1,5 @@
-import { fail, json } from './_lib/http';
-import { getSql, readResults } from './_lib/poll';
+import { fail, json } from './_lib/http.js';
+import { getSql, readResults } from './_lib/poll.js';
 
 export const config = { runtime: 'nodejs' };
 

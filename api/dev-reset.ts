@@ -1,6 +1,6 @@
-import { fail, isSameOrigin, json } from './_lib/http';
-import { getSql, isDevMode, readEnv } from './_lib/poll';
-import { hashVoterId, readVoterId } from './_lib/voter';
+import { fail, isSameOrigin, json } from './_lib/http.js';
+import { getSql, isDevMode, readEnv } from './_lib/poll.js';
+import { hashVoterId, readVoterId } from './_lib/voter.js';
 
 export const config = { runtime: 'nodejs' };
 

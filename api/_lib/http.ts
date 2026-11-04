@@ -1,4 +1,4 @@
-import type { ApiErrorCode } from '../../shared/vote-contract';
+import type { ApiErrorCode } from '../../shared/vote-contract.js';
 
 export const NO_STORE = 'no-store, max-age=0';
 

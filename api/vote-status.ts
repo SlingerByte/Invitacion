@@ -1,7 +1,7 @@
-import { isPrediction } from '../shared/vote-contract';
-import { fail, isSecureRequest, json } from './_lib/http';
-import { getSql, isDevMode, readEnv, readPollOpen } from './_lib/poll';
-import { createVoterId, hashVoterId, readVoterId, voterCookie } from './_lib/voter';
+import { isPrediction } from '../shared/vote-contract.js';
+import { fail, isSecureRequest, json } from './_lib/http.js';
+import { getSql, isDevMode, readEnv, readPollOpen } from './_lib/poll.js';
+import { createVoterId, hashVoterId, readVoterId, voterCookie } from './_lib/voter.js';
 
 export const config = { runtime: 'nodejs' };
 
