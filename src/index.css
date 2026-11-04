@@ -1,0 +1,267 @@
+@import 'tailwindcss';
+
+/*
+ * Sistema visual — "globos y estrellitas"
+ * Actualización vigente (noviembre 2026). Ver docs/DESIGN.md.
+ */
+@theme {
+  --font-display: 'Sacramento', 'Brush Script MT', cursive;
+  --font-sans: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+
+  /* Campo y voz */
+  --color-paper: #ffffff;
+  --color-ink: #2b2e2a;
+  --color-ink-soft: #5b6057;
+
+  /* Textos de la nueva dirección */
+  --color-rose: #e8928a;
+  --color-blue: #a9bfe8;
+  --color-rose-deep: #b9645b;
+  --color-blue-deep: #5a72a8;
+
+  /* Texto funcional sobre blanco: 5,6:1 y 4,7:1 (AA). El pastel queda
+     para los materiales, los rellenos y la decoración. */
+  --color-blue-ink: #4f679c;
+  --color-rose-ink: #b25a51;
+
+  /* Voz grande del título: un paso más profunda que el pastel para
+     llegar a 3,1:1 sin salir de la familia. */
+  --color-blue-display: #7190cf;
+  --color-rose-display: #d3786e;
+
+  /* Materia de los conejos, globos y estrellas */
+  --color-balloon-pink: #f0a0a8;
+  --color-balloon-pink-soft: #f6bcc1;
+  --color-balloon-blue: #a8c0e8;
+  --color-balloon-blue-soft: #bfd2f2;
+  --color-star-pink: #f6c9cc;
+  --color-star-blue: #c9d6f0;
+
+  /* Nubes de fondo: casi papel, con un dejo de cielo. */
+  --color-cloud: #e4ebf7;
+  --color-cloud-rose: #f7e8e9;
+
+  /* Opciones de la votación. La etiqueta va en un tono profundo de su
+     propia familia, no en tinta: 5,3:1 y 4,7:1 sobre el relleno. */
+  --color-pink: #f5b3aa;
+  --color-sky: #a9bfe8;
+  --color-pink-ink: #7a2e28;
+  --color-sky-ink: #334b7a;
+
+  /* Único metal */
+  --color-gold: #f2c46d;
+  /* Oro de texto para la «o» que une las dos voces: 3,2:1 sobre blanco. */
+  --color-gold-deep: #b8862f;
+
+  /* Muestra del código de vestimenta; no se usa en texto. */
+  --color-beige: #e7d9c3;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    caret-color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-star-pink);
+    color: var(--color-ink);
+  }
+
+  /* El dorado no alcanza 3:1 sobre blanco: el foco usa tinta y el oro
+     se queda en el anillo y los filetes. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-paper);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-star-blue);
+    border-radius: 999px;
+    border: 3px solid var(--color-paper);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Animaciones decorativas: sólo transform y opacity, nunca layout. */
+
+/* El conejo sube y baja con sus globos: ±4 px, como si tiraran de él. */
+@keyframes balloon-float {
+  0%,
+  100% {
+    transform: translateY(-4px);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* Balanceo mínimo desde los pies: los globos se mecen más que el cuerpo. */
+@keyframes rabbit-sway {
+  0%,
+  100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: rotate(1.2deg);
+  }
+}
+
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: var(--star-opacity, 0.65);
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: calc(var(--star-opacity, 0.65) * 0.45);
+    transform: scale(0.84) rotate(9deg);
+  }
+}
+
+/* Destellos: giran un poco más y laten como si acabaran de encenderse. */
+@keyframes sparkle-twinkle {
+  0%,
+  100% {
+    opacity: var(--star-opacity, 0.6);
+    transform: scale(0.9) rotate(-6deg);
+  }
+  45% {
+    opacity: calc(var(--star-opacity, 0.6) * 1.25);
+    transform: scale(1.08) rotate(6deg);
+  }
+}
+
+/* El aro dorado entre Niño y Niña respira, nunca cambia de tamaño de caja. */
+@keyframes ring-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgb(242 196 109 / 0);
+  }
+  50% {
+    transform: scale(1.16);
+    box-shadow: 0 0 0 4px rgb(242 196 109 / 0.14);
+  }
+}
+
+/* Lluvia de estrellas: cae muy despacio desde arriba y se desvanece al final. */
+@keyframes star-rain {
+  0% {
+    transform: translate3d(0, -18vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--rain-opacity, 0.6);
+  }
+  88% {
+    opacity: var(--rain-opacity, 0.6);
+  }
+  100% {
+    transform: translate3d(var(--rain-drift, 18px), 112vh, 0) rotate(160deg);
+    opacity: 0;
+  }
+}
+
+/* Las nubes se mecen sin irse: un desplazamiento corto y lento. */
+@keyframes cloud-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(var(--cloud-drift, 26px), -8px, 0);
+  }
+}
+
+@layer utilities {
+  .balloon-float {
+    animation-name: balloon-float;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    will-change: transform;
+  }
+
+  .rabbit-sway {
+    animation-name: rabbit-sway;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    transform-origin: 50% 94%;
+    will-change: transform;
+  }
+
+  .star-twinkle {
+    animation-name: star-twinkle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    transform-origin: center;
+  }
+
+  .sparkle-twinkle {
+    animation-name: sparkle-twinkle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    transform-origin: center;
+  }
+
+  .ring-breathe {
+    animation: ring-breathe 4.6s var(--ease-soft) infinite;
+  }
+
+  .star-rain {
+    animation-name: star-rain;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform, opacity;
+  }
+
+  .cloud-drift {
+    animation-name: cloud-drift;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    will-change: transform;
+  }
+}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Invitación">
+  <rect width="64" height="64" rx="14" fill="#FBF7EF" />
+  <circle cx="32" cy="32" r="18" fill="none" stroke="#A9884F" stroke-width="1.2" />
+  <circle cx="32" cy="32" r="3.4" fill="#A9884F" />
+  <path d="M32 9.5v5M32 49.5v5M9.5 32h5M49.5 32h5" stroke="#A9884F" stroke-width="1.2" stroke-linecap="round" />
+</svg>

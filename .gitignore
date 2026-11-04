@@ -1,0 +1,25 @@
+node_modules
+dist
+dist-ssr
+.vercel
+*.local
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Instalaciones de herramientas y agentes: no se versionan.
+.agents/
+.claude/
+.codex/
+.freebuff/
+.impeccable/
+.vscode/
+.idea/
+
+clone.log
+install.log
+dev.log
+
+build.log
+

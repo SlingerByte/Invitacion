@@ -1,0 +1,7 @@
+dist
+node_modules
+.vercel
+.agents
+.claude
+package-lock.json
+*.md
